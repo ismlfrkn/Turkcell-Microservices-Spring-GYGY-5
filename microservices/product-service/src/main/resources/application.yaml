@@ -1,27 +1,11 @@
 spring:
   application:
     name: product-service
+  profiles:
+    active: dev
+  config:
+    import: "optional:configserver:http://localhost:8888"
 
-  cloud:
-    function:
-      definition: orderCreatedEventConsumer
-    stream:
-      bindings:
-        orderCreatedEventConsumer-in-0:
-          destination: order-topic #hangi başlıktan bu mesajı alacağını belirtiyoruz
-          group: product-service-group #hangi grupta bu mesajı alacağını belirtiyoruz
-  
-      kafka:
-        binder:
-          brokers: localhost:9092
-
-  datasource:
-    url: jdbc:postgresql://localhost:5433/products
-    username: postgres
-    password: test12345
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
 server:
   port: 8082
+
