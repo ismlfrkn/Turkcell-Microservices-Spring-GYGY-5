@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: config-server
+    cloud:
+        config:
+            server:
+                git: https://github.com/ismlfrkn/Turkcell-Microservices-Spring-GYGY-5.git
+                default-label: main
+                search-paths: microservices/configs/{application}
+                clone-on-start: true
+                force-pull: true
+server:
+    port: 8888
