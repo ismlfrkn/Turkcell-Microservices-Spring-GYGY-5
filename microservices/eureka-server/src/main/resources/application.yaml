@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: eureka-server
+server:
+    port: 8761
+
+eureka:
+    client:
+        register-with-eureka: false #Kendini eurekaya tanıtmasını istemiyorsak false yapıyoruz.
+        fetch-registry: false #Kendini eurekaya tanıtmış diğer uygulamaların bilgisini almasını istemiyorsak false yapıyoruz.
+        service-url:
+            defaultZone: http://localhost:8761/eureka/
