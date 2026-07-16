@@ -50,3 +50,23 @@ Asenkron iletişimde bir servis isteği veya olayı (event) gönderir ve **cevab
 - RabbitMQ
 - ActiveMQ
 
+
+## (4) Keycloak Kavramları
+
+Keycloak, açık kaynak bir Identity and Access Management (IAM) / kimlik doğrulama-yetkilendirme sunucusudur (Red Hat tarafından geliştirilir). Amacı, her mikroservisin kendi login/şifre/rol yönetimini ayrı ayrı yazmak yerine, bu işi merkezi bir sunucuya devretmektir — yani Single Sign-On (SSO) sağlayan bir kimlik sağlayıcısı (identity provider).
+
+### (a) Realm 
+Keycloak içinde kullanıcıları, rolleri, client'ları (uygulamaları) ve authentication/authorization ayarlarını birbirinden izole eden bağımsız bir yönetim alanıdır. Farklı realm'ler tamamen ayrıdır — bir realm'deki kullanıcı, rol veya client tanımı başka bir realm'i hiç etkilemez, adeta Keycloak içinde çoklu-tenant (multi-tenant) bir yapı sağlar.
+
+### (b) Realm Roles
+
+Realm roles, bir realm genelinde tanımlanan ve o realm'e bağlı tüm client'lar arasında ortak kullanılabilen rollerdir (örn. USER, ADMIN, MODERATOR). Bir kullanıcıya realm role atadığında, o kullanıcı realm'deki hangi client'a giriş yaparsa yapsın bu rol token'ında (realm_access.roles claim'i altında) taşınır.
+
+
+### (c) Users
+
+Users, bir realm'e ait gerçek kullanıcı hesaplarının (username, email, ad-soyad, şifre gibi kimlik bilgileri) tutulduğu ve yönetildiği bölümdür. Bir kullanıcıya realm role veya client role atadığında, bu roller o kullanıcının Role Mapping sekmesinde eşleştirilir ve kullanıcı login olduğunda üretilen token'a (realm_access.roles veya resource_access.<client>.roles claim'i altında) yansıtılır.
+
+### (d) Clients
+
+Client, Keycloak'a kayıtlı olan ve kullanıcılar adına kimlik doğrulama/token talep eden her bir uygulamadır (ör. gateway-server, user-service). Bir kullanıcı login olduğunda, hangi Client üzerinden giriş yaptıysa token'a o Client'a özel bilgiler (client role'ler resource_access.<client-id>.roles altında) eklenir ve o uygulama bu token'ı kullanarak kullanıcıyı tanır.
