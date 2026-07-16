@@ -1,4 +1,9 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8085/realms/microservices-gygy5
   cloud:
     function:
       definition: orderCreatedEventConsumer
@@ -7,7 +12,7 @@ spring:
         orderCreatedEventConsumer-in-0:
           destination: order-topic #hangi başlıktan bu mesajı alacağını belirtiyoruz
           group: product-service-group #hangi grupta bu mesajı alacağını belirtiyoruz
-  
+
       kafka:
         binder:
           brokers: localhost:9092
