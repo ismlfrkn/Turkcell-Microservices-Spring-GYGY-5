@@ -70,3 +70,6 @@ Users, bir realm'e ait gerçek kullanıcı hesaplarının (username, email, ad-s
 ### (d) Clients
 
 Client, Keycloak'a kayıtlı olan ve kullanıcılar adına kimlik doğrulama/token talep eden her bir uygulamadır (ör. gateway-server, user-service). Bir kullanıcı login olduğunda, hangi Client üzerinden giriş yaptıysa token'a o Client'a özel bilgiler (client role'ler resource_access.<client-id>.roles altında) eklenir ve o uygulama bu token'ı kullanarak kullanıcıyı tanır.
+
+
+
