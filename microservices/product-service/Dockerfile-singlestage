@@ -1,0 +1,28 @@
+# SINGLE-STAGE build (bilerek tek asamali).
+# Build ve runtime ayni imajda: JDK + Maven + kaynak kod + .m2 cache
+# final imajin icinde kalir. Multi-stage'e gecince sadece JRE + jar kalacak.
+#
+# Build context multi-module yapidan dolayi microservices/ dizini olmali
+# (product-service/pom.xml, parent olarak ../pom.xml'i gosteriyor):
+#   cd microservices
+#   docker build -f product-service/Dockerfile -t product-service .
+FROM maven:3.9-eclipse-temurin-21
+#ben bu image'ı bu imagedan başlatıyorum bütün katmanları al yazacaklarımı üstüne yaz.
+WORKDIR /app
+
+# Once pom'lari kopyala ki bagimlilik indirme katmani cache'lensin
+COPY pom.xml ./pom.xml
+COPY product-service/pom.xml ./product-service/pom.xml
+
+RUN mvn -f product-service/pom.xml dependency:go-offline -B
+
+# Kaynak kodu kopyala ve paketle
+COPY product-service/src ./product-service/src
+
+RUN mvn -f product-service/pom.xml clean package -DskipTests -B
+
+# application.yaml -> server.port: 8082
+EXPOSE 8082
+
+# entrypoint => bu container çalıştığı an olacak iş, build anı değil.
+ENTRYPOINT ["java", "-jar", "product-service/target/product-service-0.0.1-SNAPSHOT.jar"]
