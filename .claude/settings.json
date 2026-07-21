@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl apply *)",
+      "Bash(kubectl rollout *)",
+      "Bash(kubectl port-forward *)"
+    ]
+  }
+}

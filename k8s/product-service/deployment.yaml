@@ -16,9 +16,8 @@ spec:
     spec:
       containers:
         - name: product-service
-          # Yerel build: cd microservices && docker build -f product-service/Dockerfile -t product-service .
-          image: product-service:latest
-          imagePullPolicy: IfNotPresent
+          image: product-service:latest # Hangi image ile çalışacaksın ?
+          imagePullPolicy: IfNotPresent # Bu image'ı deployment podu restart/scale olduğunda nasıl çekecek ?
           ports:
             - containerPort: 8082
           env:
@@ -27,19 +26,18 @@ spec:
             - name: SPRING_CONFIG_IMPORT
               value: "optional:configserver:http://config-server:8888"
           resources:
-            requests:
+            requests: # Bu deployment kodu çalıştırmadan önce minimum ne kadar kaynak ayıracak ?
               cpu: 250m
               memory: 512Mi
-            limits:
+            limits: # Bu deployment kodu çalıştırmadan önce maksimum ne kadar kaynak ayıracak ?
               cpu: 500m
-              memory: 1Gi
-          # Actuator bagimliligi olmadigi icin HTTP health endpoint'i yok; TCP probe kullanilir.
-          readinessProbe:
+              memory: 1Gi # limiti aştığında ne olacak ? pod restart olur.
+          readinessProbe: # docker'daki healtcheck'e benzer bir yapı. podun hazır olup olmadığını kontrol eder. hazır değilse service'e trafik gitmez.
             tcpSocket:
               port: 8082
             initialDelaySeconds: 20
             periodSeconds: 10
-          livenessProbe:
+          livenessProbe: # docker'daki healtcheck'e benzer bir yapı. podun canlı olup olmadığını kontrol eder. canlı değilse pod restart olur.
             tcpSocket:
               port: 8082
             initialDelaySeconds: 40
